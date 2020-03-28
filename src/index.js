@@ -4,26 +4,34 @@ import { createOvermind } from 'overmind'
 import { createHook, Provider } from 'overmind-react'
 import './styles.css'
 import { namespaced, merge } from 'overmind/config'
+import login from './login'
+import { LoginComponent } from './LoginComponent'
 
 const state = {
   count: 0,
   test: null,
-  get testget() {
+  get testget () {
     return Boolean(this.test && true)
   }
 }
 
 const actions = {
-  increaseCount({ state }) {
+  increaseCount ({ state }) {
     state.count++
   },
-  decreaseCount({ state }) {
+  decreaseCount ({ state }) {
     state.count--
   }
 }
 
 const onInitialize = ({ state }) => {
   state.test = 'x'
+}
+
+const products = {
+  state: {
+    a: null
+  }
 }
 
 const configWithMerge = merge(
@@ -33,42 +41,37 @@ const configWithMerge = merge(
     onInitialize
   },
   namespaced({
-    products: {
-      state: {
-        a: null
-      }
-    }
+    products,
+    login
   })
 )
 
-const configWithoutMerge = {
-  state,
-  actions,
-  onInitialize
-}
+const app = createOvermind(configWithMerge, {
+  devtools: true
+})
 
-const app = createOvermind(configWithMerge)
+export const useApp = createHook()
 
-const useApp = createHook()
-
-function App() {
+function App () {
   const { state, actions } = useApp()
 
   console.log(state)
 
   return (
-    <div className="App">
+    <div className='App'>
       <h1>{state.count}</h1>
       <button onClick={() => actions.decreaseCount()}>decrease</button>
       <button onClick={() => actions.increaseCount()}>increase</button>
       <div>
         this must be true: <b>{state.testget.toString()}</b>
       </div>
+      <LoginComponent />
     </div>
   )
 }
 
 const rootElement = document.getElementById('root')
+
 ReactDOM.render(
   <Provider value={app}>
     <App />
