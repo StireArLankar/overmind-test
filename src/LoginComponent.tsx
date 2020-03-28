@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useApp } from '.'
+import { useApp } from './overmind'
 
 export const LoginComponent = () => {
   const { state, actions } = useApp()

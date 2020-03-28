@@ -1,8 +1,10 @@
+import { IUser } from './state'
+
 export const api = {
-  login: async (name, pass) => {
-    return new Promise(res => {
+  login: async (name: string, pass: string) => {
+    return new Promise<IUser>(res => {
       setTimeout(() => {
-        res({ name: pass })
+        res({ name, pass })
       }, 2000)
     })
   },
